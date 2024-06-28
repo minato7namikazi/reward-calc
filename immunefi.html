@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Whitehat Point Calculator</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@400;700&display=swap");
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background-image: url("https://i.ibb.co/mXzsJQX/GHkn-Su4-WMAARUkx.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: #9370db;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(26, 26, 46, 0.8),
+          rgba(22, 33, 62, 0.8)
+        );
+        z-index: -1;
+      }
+
+      .container {
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 0 20px rgba(147, 112, 219, 0.2); /* Changed to match the new color */
+        max-width: 400px;
+        width: 100%;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      label,
+      select,
+      input,
+      button {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      label {
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+      }
+
+      select,
+      input {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 5px;
+        padding: 0.5rem;
+        color: #fff;
+        font-size: 1rem;
+      }
+
+      button {
+        background-color: #9370db; /* Changed to match the new color */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #a020f0; /* Changed to a lighter purple for hover effect */
+      }
+
+      #result {
+        margin-top: 2rem;
+        padding: 1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+
+      #result.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .result-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+      }
+
+      .result-item:last-child {
+        margin-bottom: 0;
+        font-weight: 700;
+      }
+      .footer {
+        margin-top: 2rem;
+        text-align: center;
+        color: #fff;
+        font-family: "Orbitron", sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+        background: linear-gradient(90deg, #1a1a2e, #16213e, #1a1a2e);
+        padding: 1rem;
+        border-radius: 30px;
+        box-shadow: 0 0 15px rgba(147, 112, 219, 0.5);
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      .footer span {
+        background: linear-gradient(90deg, #9370db, #a020f0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+      }
+
+      @keyframes glow {
+        from {
+          box-shadow: 0 0 15px rgba(147, 112, 219, 0.5);
+        }
+        to {
+          box-shadow: 0 0 25px rgba(147, 112, 219, 0.8),
+            0 0 35px rgba(147, 112, 219, 0.3);
+        }
+      }
+
+      .heart {
+        display: inline-block;
+        color: #e31b23;
+        font-size: 0.9rem;
+        animation: beat 0.8s ease-in-out infinite alternate;
+      }
+
+      @keyframes beat {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.2);
+        }
+      }
+
+      .bug-entry {
+        border: 1px solid rgba(147, 112, 219, 0.3);
+        border-radius: 5px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+      .remove-bug {
+        background-color: #e31b23;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 0.5rem;
+      }
+      .remove-bug:hover {
+        background-color: #ff4136;
+      }
+      #addBug {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-bottom: 1rem;
+      }
+      #addBug:hover {
+        background-color: #218838;
+      }
+
+      .profile-pic {
+        position: fixed; /* Change back to fixed to ensure it stays in place relative to the viewport */
+        bottom: 20px; /* 20 pixels from the bottom of the viewport */
+        left: 50%; /* Center the image horizontally */
+        transform: translateX(
+          -50%
+        ); /* Shifts the image back by half its width to truly center it */
+        width: 75px; /* Adjusted to 50% of the original size */
+        height: 75px; /* Adjusted to 50% of the original size */
+        border-radius: 50%; /* Makes the image circular */
+        border: 2px solid #fff; /* Optional: Adds a white border around the image */
+        z-index: 1000; /* Makes sure the image stays on top of other content */
+      }
+    </style>
+  </head>
+
+  <body>
+    <img
+      src="https://i.ibb.co/0XkvW9z/ed-BEh-NA1-400x400.jpg"
+      alt="Profile Picture"
+      class="profile-pic"
+    />
+
+    <div class="container">
+      <h1>Whitehat Points Calculator</h1>
+      <form id="pointForm">
+        <div id="bugEntries">
+          <!-- Bug entries will be dynamically added here -->
+        </div>
+        <button type="button" id="addBug">Add Bug</button>
+
+        <label for="otherPointsTotal"
+          >Other White Hats' Total Points (predict) :</label
+        >
+        <input
+          type="number"
+          id="otherPointsTotal"
+          min="0"
+          value="0"
+          step="0.01"
+        />
+
+        <label for="prizePool">Total Prize Pool ($):</label>
+        <input type="number" id="prizePool" min="0" value="0" step="0.01" />
+
+        <button type="submit">Calculate Points and Reward</button>
+      </form>
+
+      <div id="result"></div>
+    </div>
+
+    <div class="footer">
+      Built with <span class="heart">❤️</span> for <span>Mackenzie</span>
+    </div>
+    <script>
+      let bugCount = 0;
+
+      document.getElementById("addBug").addEventListener("click", function () {
+        addBugEntry();
+        document.querySelector(".profile-pic").style.display = "none"; // Hides the profile picture when adding a bug
+      });
+
+      function addBugEntry() {
+        bugCount++;
+        const bugEntry = document.createElement("div");
+        bugEntry.className = "bug-entry";
+        bugEntry.innerHTML = `
+              <h3>Bug #${bugCount}</h3>
+              <label for="bugSeverity${bugCount}">Bug Severity:</label>
+              <select id="bugSeverity${bugCount}">
+                  <option value="critical">Critical</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+              </select>
+    
+              <label for="numberOfFinders${bugCount}">Number of Finders:</label>
+              <input type="number" id="numberOfFinders${bugCount}" min="1" value="1" />
+    
+              <label for="isChiefFinder${bugCount}">Are you the Chief Finder?</label>
+              <select id="isChiefFinder${bugCount}">
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+              </select>
+    
+              <button type="button" class="remove-bug" onclick="removeBugEntry(this)">Remove Bug</button>
+          `;
+        document.getElementById("bugEntries").appendChild(bugEntry);
+      }
+
+      function removeBugEntry(button) {
+        button.parentElement.remove();
+        // Check if there are no more bugs, and if so, show the profile picture again
+        if (document.querySelectorAll(".bug-entry").length === 0) {
+          document.querySelector(".profile-pic").style.display = "block";
+        }
+      }
+
+      document
+        .getElementById("pointForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          calculatePoints();
+        });
+
+      function calculatePoints() {
+        const otherPointsTotal = parseFloat(
+          document.getElementById("otherPointsTotal").value
+        );
+        const prizePool = parseFloat(
+          document.getElementById("prizePool").value
+        );
+
+        let totalPoints = 0;
+        const bugEntries = document.querySelectorAll(".bug-entry");
+
+        bugEntries.forEach((entry, index) => {
+          const bugSeverity = entry.querySelector(
+            `#bugSeverity${index + 1}`
+          ).value;
+          const numberOfFinders = parseInt(
+            entry.querySelector(`#numberOfFinders${index + 1}`).value
+          );
+          const isChiefFinder =
+            entry.querySelector(`#isChiefFinder${index + 1}`).value === "yes";
+
+          let points = 0;
+          let bonus = 0;
+
+          const severityMultiplier = 0.9 ** (numberOfFinders - 1);
+
+          switch (bugSeverity) {
+            case "critical":
+              points = (28.8 * severityMultiplier) / numberOfFinders;
+              bonus = isChiefFinder ? 7.2 * severityMultiplier : 0;
+              break;
+            case "high":
+              points = (7.2 * severityMultiplier) / numberOfFinders;
+              bonus = isChiefFinder ? 1.8 * severityMultiplier : 0;
+              break;
+            case "medium":
+              points = (2.4 * severityMultiplier) / numberOfFinders;
+              bonus = isChiefFinder ? 0.6 * severityMultiplier : 0;
+              break;
+            case "low":
+              points = (0.8 * severityMultiplier) / numberOfFinders;
+              bonus = isChiefFinder ? 0.2 * severityMultiplier : 0;
+              break;
+          }
+
+          totalPoints += points + bonus;
+        });
+
+        const allPoints = totalPoints + otherPointsTotal;
+        const rewardPercentage = (totalPoints / allPoints) * 100;
+        const rewardAmount = (rewardPercentage / 100) * prizePool;
+
+        const resultElement = document.getElementById("result");
+        resultElement.innerHTML = `
+          <div class="result-item">
+            <span>Your total points:</span>
+            <span>${totalPoints.toFixed(2)}</span>
+          </div>
+          <div class="result-item">
+            <span>Your reward percentage:</span>
+            <span>${rewardPercentage.toFixed(2)}%</span>
+          </div>
+          <div class="result-item">
+            <span>Your estimated reward:</span>
+            <span>$${rewardAmount.toFixed(2)}</span>
+          </div>
+        `;
+        resultElement.classList.add("show");
+      }
+    </script>
+  </body>
+</html>
